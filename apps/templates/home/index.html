@@ -1,0 +1,37 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Fleet Manager {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<head>
+    <style>
+     .pc-container {
+         box-shadow: 0px 1px 20px 0px rgba(69, 90, 100, 0.08);
+         background: #FFFFFF;
+         display: flex;
+         flex-direction: column;
+         padding: 17.5px 0 17.3px 30px;
+         width: 1232px;
+         box-sizing: border-box;
+     }
+     .pcoded-content {
+         margin: 0 11.9px 1px 0;
+         padding: 0 1px 0.4px 1px;
+         width: fit-content;
+         box-sizing: border-box;
+     }
+    </style>
+</head>
+<body>
+    <div class="pc-container" >
+        {% for device in devicelist %}
+        <div class="pcoded-content">
+            <h1>VIN: {{device.vin}}</h1>
+            <p>Network: {{device.ip}}::{{device.port}}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+{% endblock content %}

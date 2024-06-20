@@ -1,0 +1,51 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} New Device {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<head>
+    <style>
+     .pc-container {
+         box-shadow: 0px 1px 20px 0px rgba(69, 90, 100, 0.08);
+         background: #FFFFFF;
+         display: flex;
+         flex-direction: row;
+         padding: 17.5px 0 17.3px 30px;
+         width: 1232px;
+         box-sizing: border-box;
+     }
+     .pcoded-content {
+         margin: 0 11.9px 1px 0;
+         padding: 0 1px 0.4px 1px;
+         width: 1000px;
+         box-sizing: border-box;
+     }
+    </style>
+</head>
+<body>
+    <div class="pc-container">
+        <div class="pcoded-content">
+            <label>New Device</label>
+            <form method="POST">
+                {% csrf_token %}
+                <br>
+                VIN(Vehicle Identify Number)
+                <br>
+                <input type="text" name="vin">
+                <br><br>
+                Host IP Address
+                <br>
+                <input type="text" name="ip">
+                <br><br>
+                Host Port Number
+                <br>
+                <input type="text" name="port">
+                <br><br>
+                <input type="submit" value="ADD">
+            </form>
+        </div>
+    </div>
+</body>
+{% endblock content %}

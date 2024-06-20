@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FLEET MANAGER{% endblock %}</title>
+    <style>
+     .nav {
+         box-shadow: 0px 1px 20px 0px rgba(69, 90, 100, 0.08);
+         background: #1C232F;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         padding: 30px 0 132px 0;
+         height: fit-content;
+         box-sizing: border-box;
+     }
+     .fleet-manager {
+         margin: 0 43.8px 47.5px 0;
+         display: inline-block;
+         overflow-wrap: break-word;
+         font-family: 'Inter';
+         font-weight: 600;
+         font-size: 20px;
+         letter-spacing: 0.8px;
+         line-height: 0.825;
+         text-transform: uppercase;
+         color: #FFFFFF;
+     }
+     .sidebar-container {
+         display: flex;
+         flex-direction: column;
+         width: fit-content;
+         box-sizing: border-box;
+     }
+     .sidebar-label {
+         margin: 0 20px 12.5px 20px;
+         display: inline-block;
+         align-self: flex-start;
+         overflow-wrap: break-word;
+         font-family: 'Inter';
+         font-weight: 600;
+         font-size: 15px;
+         letter-spacing: 0.8px;
+         line-height: 1.1;
+         text-transform: uppercase;
+         color: #7267EF;
+     }
+     .sidebar-device {
+         background: #161C25;
+         display: flex;
+         flex-direction: column;
+         padding: 14px 75.4px 0 0;
+         height: fit-content;
+         box-sizing: border-box;
+     }
+     .sidebar-device-caption {
+         margin: 0 20px 12.5px 20px;
+         overflow-wrap: break-word;
+         font-family: 'Inter';
+         font-weight: 500;
+         font-size: 15px;
+         line-height: 1.5;
+         color: #7267EF;
+     }
+     .add-device {
+         margin: 0 20px 12.5px 20px;
+         overflow-wrap: break-word;
+         font-family: 'Inter';
+         font-weight: 500;
+         font-size: 13px;
+         line-height: 1.5;
+         color: #7267EF;
+     }
+     .device-list {
+         margin: 0 20px 12.5px 20px;
+         overflow-wrap: break-word;
+         font-family: 'Inter';
+         font-weight: 500;
+         font-size: 13px;
+         line-height: 1.5;
+         color: #7267EF;
+     }
+     .sidebar-topic {
+         background: #161C25;
+         display: flex;
+         flex-direction: column;
+         padding: 14px 75.4px 0 0;
+         height: fit-content;
+         box-sizing: border-box;
+     }
+     .sidebar-topic-caption {
+         margin: 0 20px 12.5px 20px;
+         overflow-wrap: break-word;
+         font-family: 'Inter';
+         font-weight: 500;
+         font-size: 15px;
+         line-height: 1.5;
+         color: #7267EF;
+     }
+     .add-topic {
+         margin: 0 20px 12.5px 20px;
+         overflow-wrap: break-word;
+         font-family: 'Inter';
+         font-weight: 500;
+         font-size: 13px;
+         line-height: 1.5;
+         color: #7267EF;
+     }
+     .topic-list {
+         margin: 0 20px 12.5px 20px;
+         overflow-wrap: break-word;
+         font-family: 'Inter';
+         font-weight: 500;
+         font-size: 13px;
+         line-height: 1.5;
+         color: #7267EF;
+     }
+    </style>
+</head>
+<body>
+    <!-- - [ navigation menu ] start -->
+    <nav class="nav">
+        <div class="fleet-manager">
+            <a href="/index">fleet manager</a>
+        </div>
+        <div class="sidebar-container">
+            <div class="sidebar-label">Navigation</div>
+            <div class="sidebar-device">
+                <span class="sidebar-device-caption">Device List</span>
+                <a href="/new_device"><span class="add-device">+ ADD DEVICE</span></a>
+                <div class="device-list">
+                    <ul>
+                        {% for device in devicelist %}
+                        <li><a href="/device/{{device.vin}}">{{device.vin}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="sidebar-topic">
+                <span class="sidebar-topic-caption">Topic List</span>
+                <a href="/new_topic"><span class="add-topic">+ ADD TOPIC</span></a>
+                <div class="topic-list">
+                    <ul>
+                        {% for topic in topiclist %}
+                        <li><a href="/topic/{{topic.name}}">{{topic.name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</body>
+</html>

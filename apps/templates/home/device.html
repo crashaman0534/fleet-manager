@@ -1,0 +1,183 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Device {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<head>
+    <style>
+     .pc-container {
+         box-shadow: 0px 1px 20px 0px rgba(69, 90, 100, 0.08);
+         background: #FFFFFF;
+         display: flex;
+         flex-direction: row;
+         padding: 17.5px 0 17.3px 30px;
+         width: 1232px;
+         height: fit-content;
+         box-sizing: border-box;
+     }
+     .pcoded-content {
+         margin: 0 11.9px 1px 0;
+         padding: 0 1px 0.4px 1px;
+         width: 1000px;
+         display: flex;
+         flex-direction: column;
+         box-sizing: border-box;
+     }
+     .subtopic-content {
+         margin: 0 11.9px 10px 0;
+         padding: 0 1px 0.4px 1px;
+         width: 1000px;
+         display: flex;
+         flex-direction: column;
+         box-sizing: border-box;
+     }
+     .subtopic-caption {
+         margin: 0 11.9px 1px 0;
+         padding: 0 1px 0.4px 1px;
+         width: 1000px;
+         box-sizing: border-box;
+     }
+     .subtopic-list {
+         display: flex;
+         flex-direction: row;
+     }
+     .pubtopic-content {
+         margin: 0 11.9px 10px 0;
+         padding: 0 1px 0.4px 1px;
+         width: 1000px;
+         display: flex;
+         flex-direction: column;
+         box-sizing: border-box;
+     }
+     .pubtopic-caption {
+         margin: 0 11.9px 1px 0;
+         padding: 0 1px 0.4px 1px;
+         width: 1000px;
+         box-sizing: border-box;
+     }
+     .pubtopic-list {
+         display: flex;
+         flex-direction: column;
+     }
+     .pubtopic-item {
+         display: flex;
+         flex-direction: row;
+     }
+     .console-content {
+         margin: 0 11.9px 10px 0;
+         padding: 0 1px 0.4px 1px;
+         display: flex;
+         flex-direction: column;
+     }
+     .pcoded-submenu {
+         margin: 0 11.9px 1px 0;
+         padding: 0 1px 0.4px 1px;
+         text-align: right;
+         box-sizing: border-box;
+     }
+    </style>
+</head>
+<body>
+    <div class="pc-container">
+        <div class="pcoded-content">
+            <div class="subtopic-content">
+                <span class="subtopic-caption"><label>Subscribe Topic</label></span>
+                <span class="subtopic-list">
+                    {% for topic in topiclist %}
+                    {% if topic.isSub == True %}
+                    <input id="{{topic.name}}" type="checkbox" name="topic" value="{{topic.name}}" onchange="handleCheckboxChange(event)">
+                    <label for="topic_{{forloop.counter}}">{{topic.name}}</label>
+                    &nbsp&nbsp&nbsp&nbsp&nbsp
+                    {% endif %}
+                    {% endfor %}
+                </span>
+            </div>
+            <div class="pubtopic-content">
+                <span class="pubtopic-caption"><label>Publish Topic</label></span>
+                <span class="pubtopic-list">
+                    {% for topic in topiclist %}
+                    {% if topic.isPub == True %}
+                    <span class="pubtopic-item">
+                        <button style="width:130px" id="{{topic.name}}" onclick="handleButtonClicked(event)" value="{{topic.name}}">{{topic.name}}</button>
+                        &nbsp&nbsp&nbsp&nbsp&nbsp
+                        <input style="width:400px" id="{{topic.name}}_input" type="text" placeholder="Enter message">
+                    </span>
+                    {% endif %}
+                    {% endfor %}
+                </span>
+            </div>
+            <div class="console-content">
+                <label>Monitoring Console</label>
+                <textarea id="messageBox" rows="30" cols="200" name="console"></textarea>
+            </div>
+            <div class="pcoded-submenu">
+                <button><a href="remove">remove</a></button>
+            </div>
+        </div>
+    </div>
+    <script>
+     document.addEventListener('DOMContentLoaded', function () {
+         const sendSocket = new WebSocket('ws://localhost:8000/ws/mqtt/{{device.ip}}:{{device.port}}/');
+         const receiveSocket = new WebSocket('ws://localhost:8000/ws/mqtt/{{device.ip}}:{{device.port}}/');
+
+         receiveSocket.onmessage = function(e) {
+             const data = JSON.parse(e.data);
+             const messageBox = document.querySelector('#messageBox');
+             const message = data['message'];
+             console.log('receive: ${message}');
+             messageBox.value += message + '\n';
+         };
+
+         receiveSocket.onclose = function(e) {
+             console.error('console socket closed');
+         };
+
+         function handleCheckboxChange(event) {
+             const checkbox = event.target;
+             const isChecked = checkbox.checked;
+             const topicName = checkbox.value;
+
+             if (isChecked) {
+                 const message = {
+                     'command': 'subscribe',
+                     'message': topicName
+                 };
+                 sendSocket.send(JSON.stringify(message));
+             } else {
+                 const message = {
+                     'command': 'unsubscribe',
+                     'message': topicName
+                 };
+                 sendSocket.send(JSON.stringify(message));
+             }
+         }
+
+         function handleButtonClicked(event) {
+             const button = event.target;
+             const topicName = button.value;
+             const inputElement = document.getElementById(topicName + '_input');
+             const message = {
+                 'command': 'publish',
+                 'message': topicName + '::' + inputElement.value
+             };
+             console.log(topicName + ' button clicked with message: ' + inputElement.value);
+             sendSocket.send(JSON.stringify(message));
+         }
+
+         // Add event listeners to checkboxes
+         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+         checkboxes.forEach(checkbox => {
+             checkbox.addEventListener('change', handleCheckboxChange);
+         });
+
+         // Add event listeners to buttons
+         const buttons = document.querySelectorAll('.pubtopic-item button');
+         buttons.forEach(button => {
+             button.addEventListener('click', handleButtonClicked);
+         });
+     });
+    </script>
+</body>
+{% endblock content %}

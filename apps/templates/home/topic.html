@@ -1,0 +1,50 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Topic {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<head>
+    <style>
+     .pc-container {
+         box-shadow: 0px 1px 20px 0px rgba(69, 90, 100, 0.08);
+         background: #FFFFFF;
+         display: flex;
+         flex-direction: row;
+         padding: 17.5px 0 17.3px 30px;
+         width: 1232px;
+         box-sizing: border-box;
+     }
+     .pcoded-content {
+         margin: 0 11.9px 1px 0;
+         padding: 0 1px 0.4px 1px;
+         width: 1000px;
+         box-sizing: border-box;
+     }
+     .pccoded-submenu {
+         margin: 0 11.9px 1px 0;
+         padding: 0 1px 0.4px 1px;
+         width: 1000px;
+         text-align: right;
+         box-sizing: border-box;
+     }
+    </style>
+</head>
+<body>
+    <div class="pc-container">
+        <div class="pccoded-content">
+            <h1>TOPIC: {{topic.name}}</h1>
+            {% if topic.isPub == True %}
+            <br><p>is publish message</p><br>
+            {% endif %}
+            {% if topic.isSub == True %}
+            <br><p>is subscribe message</p><br>
+            {% endif %}
+            <div class="pccoded-submenu">
+                <button><a href="remove">remove</a></button>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock content %}
